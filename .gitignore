@@ -1,0 +1,5 @@
+*.[oa]
+.DS_Store
+*~
+*.swp
+*.pyc
