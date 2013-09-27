@@ -31,7 +31,9 @@ list_games = arguments['--games']
 quality = arguments['--quality'] 
 desired_feed = arguments['<team>']
 verbose = arguments['--verbose']
-if not desired_feed:
+if desired_feed:
+    desired_feed = desired_feed.lower()
+else:
     desired_feed = "van"
 application = arguments['-a']
 if not application:
