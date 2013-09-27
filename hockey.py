@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Tool to open NHL GameCenter streams from the command line.
+"""hockey.py -- tool to open NHL GameCenter streams from the command line
 
 Usage:
     hockey.py
@@ -12,7 +12,7 @@ Options:
     -h --help                     Show this screen.
     -g --games                    List available games today.       
     -f --feeds                    List available feeds today.
-    -q QUALITY --quality=QUALITY  Set stream quality [default: 4500].
+    -q QUALITY --quality=QUALITY  Set stream quality [default: 3000].
     -a APPLICATION                Application to open stream with.
     -v --verbose                  Turn on verbose messages.
 
