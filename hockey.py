@@ -5,13 +5,13 @@
 Usage:
     hockey.py
     hockey.py [<team>] [-q QUALITY | --quality=QUALITY] [-a APPLICATION] [-v | --verbose]
-    hockey.py [[--games | -g ] | [--feeds | -f]] 
+    hockey.py [-l | --list] [-s | --streams]
     hockey.py (-h | --help)
 
 Options:
     -h --help                     Show this screen.
-    -g --games                    List available games today.       
-    -f --feeds                    List available feeds today.
+    -l --list                     List available games today.       
+    -s --streams                  Include stream links in list.
     -q QUALITY --quality=QUALITY  Set stream quality [default: 3000].
     -a APPLICATION                Application to open stream with.
     -v --verbose                  Turn on verbose messages.
@@ -26,15 +26,13 @@ import xml.etree.ElementTree as ET
 
 arguments = docopt.docopt(__doc__)
 
-list_feeds = arguments['--feeds']
-list_games = arguments['--games']
+list_games = arguments['--list']
+list_streams = arguments['--streams']
 quality = arguments['--quality'] 
 desired_feed = arguments['<team>']
 verbose = arguments['--verbose']
 if desired_feed:
     desired_feed = desired_feed.lower()
-else:
-    desired_feed = "van"
 application = arguments['-a']
 if not application:
     application = "QuickTime Player.app"
@@ -62,10 +60,10 @@ for game in root:
         ipad_url = assignment.find("ipad_url").text
         formatted_url = ipad_url.replace("ipad", quality)
         feeds[feed_team] = formatted_url
-        if list_feeds:
+        if list_streams:
             output.append("{0:s}: {1:s}".format(feed_team.upper(), formatted_url))
 
-if list_feeds or list_games:
+if not desired_feed:
     output = "\n".join(output)+"\n"
     sys.stdout.write(output)
 else:
