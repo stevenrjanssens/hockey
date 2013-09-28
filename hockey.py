@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""hockey.py -- tool to open NHL GameCenter streams from the command line
+"""hockey.py -- tool to open hockey streams from the command line
 
 Usage:
     hockey.py
