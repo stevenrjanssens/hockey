@@ -38,7 +38,7 @@ if not application:
     application = "QuickTime Player.app"
 if verbose:
     print arguments
-if quality not in [800, 1600, 3000, 4500]:
+if quality not in ["800", "1600", "3000", "4500"]:
     print "Error: invalid quality"
     sys.exit()
 
