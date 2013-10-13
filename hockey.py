@@ -38,6 +38,9 @@ if not application:
     application = "QuickTime Player.app"
 if verbose:
     print arguments
+if quality not in [800, 1600, 3000, 4500]:
+    print "Error: invalid quality"
+    sys.exit()
 
 url = "http://208.92.36.37/nlds/as3/get_games.php?client=nhl&playerclient=hop"
 data = urllib.urlopen(url).read()
