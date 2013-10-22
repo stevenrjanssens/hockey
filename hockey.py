@@ -4,7 +4,7 @@
 
 Usage:
     hockey.py
-    hockey.py [<team>] [-q QUALITY | --quality=QUALITY] [-a APPLICATION] [-v | --verbose]
+    hockey.py [<team>...] [-q QUALITY | --quality=QUALITY] [-a APPLICATION] [-v | --verbose]
     hockey.py [-l | --list] [-s | --streams]
     hockey.py (-h | --help)
 
@@ -29,10 +29,10 @@ arguments = docopt.docopt(__doc__)
 list_games = arguments['--list']
 list_streams = arguments['--streams']
 quality = arguments['--quality'] 
-desired_feed = arguments['<team>']
+desired_feeds = arguments['<team>']
 verbose = arguments['--verbose']
-if desired_feed:
-    desired_feed = desired_feed.lower()
+if desired_feeds:
+    desired_feeds = [feed.lower() for feed in desired_feeds]
 application = arguments['-a']
 if not application:
     application = "QuickTime Player.app"
@@ -66,14 +66,15 @@ for game in root:
         if list_streams:
             output.append("{0:s}: {1:s}".format(feed_team.upper(), formatted_url))
 
-if not desired_feed:
+if not desired_feeds:
     output = "\n".join(output)+"\n"
     sys.stdout.write(output)
 else:
-    command = "open -a \"{0:s}\" {1:s}".format(application, feeds[desired_feed])
-    if verbose:
-        print command
-    subprocess.call(command, shell=True)
+    for desired_feed in desired_feeds:
+        command = "open -a \"{0:s}\" {1:s}".format(application, feeds[desired_feed])
+        if verbose:
+            print command
+        subprocess.call(command, shell=True)
 
 sys.exit()
 
