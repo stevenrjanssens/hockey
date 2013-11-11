@@ -22,7 +22,8 @@ import sys
 import docopt
 import urllib
 import subprocess
-import xml.etree.ElementTree as ET
+import json
+import datetime
 
 arguments = docopt.docopt(__doc__)
 
@@ -42,29 +43,35 @@ if quality not in ["800", "1600", "3000", "4500"]:
     print "Error: invalid quality"
     sys.exit()
 
-url = "http://208.92.36.37/nlds/as3/get_games.php?client=nhl&playerclient=hop"
-data = urllib.urlopen(url).read()
-root = ET.fromstring(data)
+games_url = "http://live.nhl.com/GameData/SeasonSchedule-20132014.json"
+games_data = urllib.urlopen(games_url).read()
+games = json.loads(games_data)
+
+today = datetime.date.today().strftime("%Y%m%d")
 
 feeds = {}
 output = []
-
-for game in root:
-    game_date = game.attrib['game_date']
-    home_team = game.find("home_team").text
-    away_team = game.find("away_team").text
-    output.append("{0:s}@{1:s} {2:s}".format(away_team, home_team, game_date))
-    for assignment in game.find("assignments"):
-        feed_display_name = assignment.attrib["feed_display_name"].capitalize()
-        if feed_display_name == "Home":
-            feed_team = home_team.lower()
-        else:
-            feed_team = away_team.lower()
-        ipad_url = assignment.find("ipad_url").text
-        formatted_url = ipad_url.replace("ipad", quality)
-        feeds[feed_team] = formatted_url
-        if list_streams:
-            output.append("{0:s}: {1:s}".format(feed_team.upper(), formatted_url))
+for game in games:
+    date, time = game['est'].split()
+    if date != today:
+        continue
+    game_id = str(game['id'])
+    game_id = game_id[4:6]+"_"+game_id[6:]
+    stream_url = "http://smb.cdnak.neulion.com/fs/nhl/mobile/feed_new/data/streams/2013/ipad/{0:s}.json".format(game_id)
+    stream_data = urllib.urlopen(stream_url).read()
+    streams = json.loads(stream_data)
+    output.append("{0:s} @ {1:s} {2:s}".format(game['a'], game['h'], game['est']))
+    try:
+        ipad_home = streams['gameStreams']['ipad']['home']['live']['bitrate0']
+        ipad_away = streams['gameStreams']['ipad']['away']['live']['bitrate0']
+        home_stream = ipad_home.replace("ipad", quality)
+        away_stream = ipad_away.replace("ipad", quality)
+        feeds[game['h'].lower()] = home_stream
+        feeds[game['a'].lower()] = away_stream
+        output.append("{0:s}: {1:s}".format(game['a'], away_stream))
+        output.append("{0:s}: {1:s}\n".format(game['h'], home_stream))
+    except KeyError:
+        output.append("No streams yet\n")
 
 if not desired_feeds:
     output = "\n".join(output)+"\n"
