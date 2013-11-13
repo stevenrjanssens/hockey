@@ -60,7 +60,7 @@ for game in games:
     stream_url = "http://smb.cdnak.neulion.com/fs/nhl/mobile/feed_new/data/streams/2013/ipad/{0:s}.json".format(game_id)
     stream_data = urllib.urlopen(stream_url).read()
     streams = json.loads(stream_data)
-    output.append("{0:s} @ {1:s} {2:s}".format(game['a'], game['h'], game['est']))
+    output.append("{0:s} @ {1:s} {2:s}".format(game['a'], game['h'], time[:5]))
     try:
         ipad_home = streams['gameStreams']['ipad']['home']['live']['bitrate0']
         ipad_away = streams['gameStreams']['ipad']['away']['live']['bitrate0']
