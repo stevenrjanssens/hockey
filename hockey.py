@@ -68,10 +68,12 @@ for game in games:
         away_stream = ipad_away.replace("ipad", quality)
         feeds[game['h'].lower()] = home_stream
         feeds[game['a'].lower()] = away_stream
-        output.append("{0:s}: {1:s}".format(game['a'], away_stream))
-        output.append("{0:s}: {1:s}\n".format(game['h'], home_stream))
+        if list_streams:
+            output.append("{0:s}: {1:s}".format(game['a'], away_stream))
+            output.append("{0:s}: {1:s}\n".format(game['h'], home_stream))
     except KeyError:
-        output.append("No streams yet\n")
+        if list_streams:
+            output.append("No streams yet\n")
 
 if not desired_feeds:
     output = "\n".join(output)+"\n"
