@@ -40,8 +40,9 @@ if not application:
 if verbose:
     print arguments
 if quality not in ["800", "1600", "3000", "4500"]:
-    print "Error: invalid quality"
-    sys.exit()
+    quality = "3000"
+    if verbose:
+        print "Warning: invalid quality, reverting to default"
 
 games_url = "http://live.nhl.com/GameData/SeasonSchedule-20132014.json"
 games_data = urllib.urlopen(games_url).read()
