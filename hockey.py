@@ -48,6 +48,8 @@ games_url = "http://live.nhl.com/GameData/SeasonSchedule-20132014.json"
 games_data = urllib.urlopen(games_url).read()
 games = json.loads(games_data)
 
+neulion_ip = "192.241.136.149"
+
 today = datetime.date.today().strftime("%Y%m%d")
 
 feeds = {}
@@ -58,7 +60,7 @@ for game in games:
         continue
     game_id = str(game['id'])
     game_id = game_id[4:6]+"_"+game_id[6:]
-    stream_url = "http://smb.cdnak.neulion.com/fs/nhl/mobile/feed_new/data/streams/2013/ipad/{0:s}.json".format(game_id)
+    stream_url = "http://{0:s}/fs/nhl/mobile/feed_new/data/streams/2013/ipad/{1:s}.json".format(neulion_ip, game_id)
     stream_data = urllib.urlopen(stream_url).read()
     streams = json.loads(stream_data)
     output.append("{0:s} @ {1:s} {2:s}".format(game['a'], game['h'], time[:5]))
