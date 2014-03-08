@@ -16,7 +16,7 @@ Options:
     -a APPLICATION                Application to open stream with.
     -v --verbose                  Turn on verbose messages.
 
-Need to add "192.241.136.149 nlsk.neulion.com" to /etc/hosts
+No longer works...
 
 """
 
@@ -32,7 +32,7 @@ arguments = docopt.docopt(__doc__)
 list_games = arguments['--list']
 list_streams = arguments['--streams']
 quality = arguments['--quality'] 
-desired_feeds = arguments['<team>']
+teams = arguments['<team>']
 verbose = arguments['--verbose']
 if desired_feeds:
     desired_feeds = [feed.lower() for feed in desired_feeds]
