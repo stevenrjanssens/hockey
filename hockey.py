@@ -16,8 +16,6 @@ Options:
     -a APPLICATION                Application to open stream with.
     -v --verbose                  Turn on verbose messages.
 
-No longer works...
-
 """
 
 import sys
@@ -32,7 +30,7 @@ arguments = docopt.docopt(__doc__)
 list_games = arguments['--list']
 list_streams = arguments['--streams']
 quality = arguments['--quality'] 
-teams = arguments['<team>']
+desired_feeds = arguments['<team>']
 verbose = arguments['--verbose']
 if desired_feeds:
     desired_feeds = [feed.lower() for feed in desired_feeds]
@@ -83,7 +81,8 @@ if not desired_feeds:
     sys.stdout.write(output)
 else:
     for desired_feed in desired_feeds:
-        command = "open -a \"{0:s}\" {1:s}".format(application, feeds[desired_feed])
+        #command = "open -a \"{0:s}\" {1:s}".format(application, feeds[desired_feed])
+        command = "/Applications/VLC.app/Contents/MacOS/VLC -vvv {0:s} :http-user-agent=\"PS4 libhttp/1.60\"".format(feeds[desired_feed])
         if verbose:
             print command
         subprocess.call(command, shell=True)
