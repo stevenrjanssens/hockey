@@ -45,6 +45,9 @@ if quality not in ["800", "1600", "3000", "4500"]:
         print "Warning: invalid quality, reverting to default"
 
 user_agent = "PS4 libhttp/1.60"
+#user_agent = "AppleCoreMedia/1.0.0.8C148 (iPad; U; CPU OS 4_2_1 like Mac OS X; en_us)"
+#user_agent = "Mozilla/5.0 (PLAYSTATION 3; 3.55)"
+#user_agent = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0; Xbox; Xbox One)"
 
 games_url = "http://live.nhl.com/GameData/SeasonSchedule-20132014.json"
 games_data = urllib.urlopen(games_url).read()
