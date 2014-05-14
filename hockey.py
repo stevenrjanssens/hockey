@@ -44,6 +44,8 @@ if quality not in ["800", "1600", "3000", "4500"]:
     if verbose:
         print "Warning: invalid quality, reverting to default"
 
+user_agent = "PS4 libhttp/1.60"
+
 games_url = "http://live.nhl.com/GameData/SeasonSchedule-20132014.json"
 games_data = urllib.urlopen(games_url).read()
 games = json.loads(games_data)
@@ -82,7 +84,7 @@ if not desired_feeds:
 else:
     for desired_feed in desired_feeds:
         #command = "open -a \"{0:s}\" {1:s}".format(application, feeds[desired_feed])
-        command = "/Applications/VLC.app/Contents/MacOS/VLC -vvv {0:s} :http-user-agent=\"PS4 libhttp/1.60\"".format(feeds[desired_feed])
+        command = "/Applications/VLC.app/Contents/MacOS/VLC -vvv {0:s} :http-user-agent=\"{1:s}\"".format(feeds[desired_feed], user_agent)
         if verbose:
             print command
         subprocess.call(command, shell=True)
