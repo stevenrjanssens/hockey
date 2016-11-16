@@ -3,7 +3,7 @@
 """hockey.py -- tool to open extended highlights
 
 Usage:
-    hockey.py
+    hockey.py [<team>]
 
 Options:
     -h --help  Show this screen.
@@ -11,7 +11,6 @@ Options:
 """
 
 from __future__ import print_function
-import sys
 import docopt
 import urllib
 import subprocess
@@ -20,6 +19,9 @@ import datetime
 
 if __name__ == "__main__":
     arguments = docopt.docopt(__doc__)
+    team = arguments['<team>']
+    if team:
+        team = team.lower()
 
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(1)
@@ -30,6 +32,10 @@ if __name__ == "__main__":
 
     for game in games['dates'][0]['games']:
         blurb = game['content']['media']['epg'][2]['items'][0]['blurb']
+        teams = ' '.join(blurb.split(':')[1].split('@')).lower()
         extended_highlights = game['content']['media']['epg'][2]['items'][0]['playbacks'][-1]['url']
-        print(blurb)
-        print(extended_highlights+'\n')
+        if not team:
+            print(blurb)
+            print(extended_highlights+'\n')
+        elif team in teams:
+            subprocess.call('open -a \'QuickTime Player\' {:s}'.format(extended_highlights), shell=True)
