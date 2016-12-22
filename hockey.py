@@ -12,7 +12,7 @@ Options:
 
 from __future__ import print_function
 import docopt
-import urllib
+import requests
 import subprocess
 import json
 import datetime
@@ -27,8 +27,8 @@ if __name__ == "__main__":
     yesterday = today - datetime.timedelta(1)
 
     stats_api = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate={date}&endDate={date}&expand=schedule.game.content.media.epg'
-    games_data = urllib.urlopen(stats_api.format(date=yesterday.strftime("%Y-%m-%d"))).read()
-    games = json.loads(games_data)
+    r = requests.get(stats_api.format(date=yesterday.strftime("%Y-%m-%d")))
+    games = json.loads(r.text)
 
     for game in games['dates'][0]['games']:
         blurb = game['content']['media']['epg'][2]['items'][0]['blurb']
