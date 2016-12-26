@@ -12,6 +12,7 @@ Options:
 
 from __future__ import print_function
 import docopt
+import sys
 import requests
 import subprocess
 import json
@@ -28,9 +29,13 @@ if __name__ == "__main__":
 
     stats_api = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate={date}&endDate={date}&expand=schedule.game.content.media.epg'
     r = requests.get(stats_api.format(date=yesterday.strftime("%Y-%m-%d")))
-    games = json.loads(r.text)
+    data = json.loads(r.text)
 
-    for game in games['dates'][0]['games']:
+    if data['totalGames'] == 0:
+        print('No games')
+        sys.exit()
+
+    for game in data['dates'][0]['games']:
         blurb = game['content']['media']['epg'][2]['items'][0]['blurb']
         teams = ' '.join(blurb.split(':')[1].split('@')).lower()
         extended_highlights = game['content']['media']['epg'][2]['items'][0]['playbacks'][-1]['url']
