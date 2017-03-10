@@ -3,10 +3,11 @@
 """hockey.py -- tool to open extended highlights
 
 Usage:
-    hockey.py [<team>]
+    hockey.py [options] [<team>]
 
 Options:
     -h --help  Show this screen.
+    -d DATE    YYYY-MM-DD
 
 """
 
@@ -23,17 +24,26 @@ if __name__ == "__main__":
     team = arguments['<team>']
     if team:
         team = team.lower()
+    date = arguments['-d']
 
-    today = datetime.date.today()
-    yesterday = today - datetime.timedelta(1)
+    if not date:
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(1)
+        date = yesterday
+    else:
+        yyyy, mm, dd = [int(i) for i in date.split('-')]
+        date = datetime.date(yyyy, mm, dd)
 
     stats_api = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate={date}&endDate={date}&expand=schedule.game.content.media.epg'
-    r = requests.get(stats_api.format(date=yesterday.strftime("%Y-%m-%d")))
+    r = requests.get(stats_api.format(date=date.strftime('%Y-%m-%d')))
     data = json.loads(r.text)
 
     if data['totalGames'] == 0:
         print('No games')
         sys.exit()
+
+    if not team:
+        print('Games on {}\n'.format(date.strftime('%Y-%m-%d')))
 
     for game in data['dates'][0]['games']:
         blurb = game['content']['media']['epg'][2]['items'][0]['blurb']
