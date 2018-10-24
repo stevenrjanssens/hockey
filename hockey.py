@@ -26,13 +26,15 @@ if __name__ == "__main__":
         team = team.lower()
     date = arguments['-d']
 
-    if not date:
+    if date and date.lower() == 'today':
+        date = datetime.date.today()
+    elif date:
+        yyyy, mm, dd = [int(i) for i in date.split('-')]
+        date = datetime.date(yyyy, mm, dd)
+    else:
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(1)
         date = yesterday
-    else:
-        yyyy, mm, dd = [int(i) for i in date.split('-')]
-        date = datetime.date(yyyy, mm, dd)
 
     stats_api = 'https://statsapi.web.nhl.com/api/v1/schedule?startDate={date}&endDate={date}&expand=schedule.game.content.media.epg'
     r = requests.get(stats_api.format(date=date.strftime('%Y-%m-%d')))
