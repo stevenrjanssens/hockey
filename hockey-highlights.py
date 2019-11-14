@@ -8,6 +8,7 @@ Usage:
 Options:
     -h --help  Show this screen.
     -d DATE    YYYY-MM-DD
+    --dl       Download all.
 
 """
 
@@ -51,8 +52,13 @@ if __name__ == "__main__":
         blurb = game['content']['media']['epg'][2]['items'][0]['blurb']
         teams = ' '.join(blurb.split(':')[1].split('@')).lower()
         extended_highlights = game['content']['media']['epg'][2]['items'][0]['playbacks'][-1]['url']
+        # download
+        if arguments['--dl']:
+            subprocess.call('curl {:s} -o "{:s}.mp4"'.format(extended_highlights, blurb), shell=True)
+        # list
         if not team:
             print(blurb)
             print(extended_highlights+'\n')
+        # play
         elif team in teams:
             subprocess.call('open -a \'QuickTime Player\' {:s}'.format(extended_highlights), shell=True)
